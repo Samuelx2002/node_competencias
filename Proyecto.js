@@ -11,31 +11,26 @@ let plants = Array.from({ length: 5 }, (_, i) => ({
 
 app.use(express.json());
 
-// Ruta principal
 app.get("/", (req, res) => {
     res.send("¡Bienvenido al Invernadero! Usa /api/greenhouse para ver los datos.");
 });
 
-// Ruta para obtener el estado del invernadero
 app.get("/api/greenhouse", (req, res) => {
     res.json(plants);
 });
 
-// Ruta para simular cambios en las condiciones
 app.post("/api/greenhouse", (req, res) => {
     const { simulate } = req.body;
 
     if (simulate) {
-        // Simular cambios: reducir temperatura y aumentar humedad
         plants = plants.map((plant) => ({
             ...plant,
-            temperature: (parseFloat(plant.temperature) - 5).toFixed(2), // Reducir temperatura en 5 grados
-            humidity: Math.min(80, parseFloat(plant.humidity) + 10).toFixed(2), // Aumentar humedad en 10%, máximo 80%
+            temperature: (parseFloat(plant.temperature) - 10).toFixed(2), // Reducir temperatura en 10 grados
+            humidity: Math.min(100, parseFloat(plant.humidity) + 15).toFixed(2), // Aumentar humedad en 15%, máximo 100%
         }));
 
         console.log("Simulación aplicada. Restaurando valores en 30 segundos...");
 
-        // Restaurar valores después de 30 segundos
         setTimeout(() => {
             plants = plants.map((plant) => ({
                 id: plant.id,
@@ -52,7 +47,6 @@ app.post("/api/greenhouse", (req, res) => {
     res.status(400).json({ message: "Petición inválida. Asegúrate de enviar { simulate: true } en el cuerpo." });
 });
 
-// Simular cambios regulares en las condiciones (cada 10 segundos)
 setInterval(() => {
     plants = plants.map((plant) => ({
         ...plant,
