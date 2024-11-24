@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 10000;
 
 let plants = Array.from({ length: 5 }, (_, i) => ({
     id: i + 1,
